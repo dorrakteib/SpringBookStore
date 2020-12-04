@@ -1,9 +1,10 @@
 package com.vermeg.bookstore.controllers;
 
-import com.vermeg.bookstore.Exceptions.BookNotFoundException;
 import com.vermeg.bookstore.entities.Book;
 import com.vermeg.bookstore.repositories.BookRepository;
+import com.vermeg.bookstore.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,46 +19,36 @@ public class BooksRestController {
     @Autowired
     BookRepository bookRepository;
 
+    @Autowired
+    BookService bookService;
+
     @GetMapping("books")
-    public List<Book> getAll(){
-        return bookRepository.findAll();
+    public List<Book> getAll() {
+        return bookService.getAll();
     }
 
     @GetMapping("book/{id}")
-    public Book getBookById(@PathVariable int id) throws BookNotFoundException {
-        return bookRepository.findById(id).orElseThrow(()-> new BookNotFoundException("The book " +
-                "with the ID "+id+" does not exist"));
+    public Book getBookById(@PathVariable Long id) {
+        return bookService.getBookById(id);
     }
 
     @PostMapping("book/add")
-    public Book addBook(@RequestBody @Validated Book b,  BindingResult result) {
-        if(result.hasErrors())
+    public Book addBook(@RequestBody @Validated Book b, BindingResult result) {
+        if (result.hasErrors())
             System.err.println(result.getAllErrors());
-        // si le produit est valide
-        return bookRepository.save(b);
+        return bookService.addBook(b);
     }
 
     @DeleteMapping("book/{id}")
-    public Optional<Book> deleteBook(@PathVariable int id) throws BookNotFoundException {
-        Optional<Book> b = bookRepository.findById(id);
-        if (b != null) {
-            bookRepository.deleteById(id);
-            return b;
-        }
-        else throw new BookNotFoundException("The book " +
-                "with the ID "+id+" does not exist");
+    public Book deleteBook(@PathVariable Long id) {
+        return bookService.deleteBook(id);
     }
 
     @PutMapping("book/modify/{id}")
-    public void updateBook(@RequestBody @Validated Book b, @PathVariable int id,
-                           BindingResult result) throws BookNotFoundException {
-        if(result.hasErrors())
+    public void updateBook(@RequestBody @Validated Book b, @PathVariable Long id,
+                           BindingResult result) {
+        if (result.hasErrors())
             System.err.println(result.getAllErrors());
-        // si le produit est valide
-       bookRepository.findById(id).map(book -> bookRepository.save(b))
-               .orElseThrow(()-> new BookNotFoundException("The book " +
-               "with the ID "+id+" does not exist"));
+        bookService.updateBook(b, id);
     }
-
-
 }

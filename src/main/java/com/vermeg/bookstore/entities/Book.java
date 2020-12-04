@@ -6,11 +6,11 @@ import java.util.Date;
 import javax.validation.constraints.*;
 
 @Entity @Data @NoArgsConstructor @AllArgsConstructor
-//@Table(uniqueConstraints={@UniqueConstraint(columnNames={"title"})})
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"title"})})
 public class Book {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @NotNull(message = "The title can't be empty") @Size(min=4, message = "the title's length " +
             "must be at least 4")
     private String title;
