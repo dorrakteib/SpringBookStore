@@ -35,13 +35,19 @@ public class CommandLineService {
                 "No command line with this id"));
     }
 
+
     public CommandLine addCommandLine(Long bookId,  CommandLine commandLine,
-                                      Long userId) {
+                                      Long userId) throws Exception {
         Book b = bookService.getBookById(bookId);
         Optional<Command> c = commandService.getUserActiveCommand(userId);
         // if the user still has a command which is not winded up
-        if (c.isPresent()){ commandLine.setCommand(c.get());
-            System.err.println(true);}
+        if (c.isPresent()){
+            commandLine.setCommand(c.get());
+            System.err.println(true);
+            //test if the command already has a command line containing the book id
+            if (commandLineRepository.findCommandLineByCommandIdAndBookId(c.get().getId(), bookId).isPresent())
+                throw new Exception("You have already commanded this book");
+            }
 
         else {
             System.err.println(false);
@@ -69,7 +75,7 @@ public class CommandLineService {
             throw new Exception("This command is " +
                     "winded you can't modify its lines");
         }
-        CommandLine cl = commandLineRepository.findCommandLineByCommandIdAndBookId(coId, bId);
+        CommandLine cl = commandLineRepository.findCommandLineByCommandIdAndBookId(coId, bId).get();
         cl.setQuantity(c.getQuantity());
         return commandLineRepository.save(cl);
     }

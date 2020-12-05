@@ -28,7 +28,7 @@ public class CommandLineRestController {
 
     @PostMapping("add/user/{userId}/book/{bookId}")
     public CommandLine addLine(@PathVariable Long bookId,@PathVariable Long userId,
-                               @RequestBody @Validated CommandLine c, BindingResult result) {
+                               @RequestBody @Validated CommandLine c, BindingResult result) throws Exception {
         if (result.hasErrors())
             System.err.println(result.getAllErrors());
         return commandLineService.addCommandLine(bookId, c, userId);
