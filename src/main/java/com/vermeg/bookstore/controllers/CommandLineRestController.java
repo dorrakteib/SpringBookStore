@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/command-line/")
-public class CommandLineController {
+public class CommandLineRestController {
 
     @Autowired
     CommandLineService commandLineService;

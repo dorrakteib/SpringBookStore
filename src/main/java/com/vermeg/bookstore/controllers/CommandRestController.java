@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/command/")
-public class CommandController {
+public class CommandRestController {
 
     @Autowired
     CommandService commandService;
