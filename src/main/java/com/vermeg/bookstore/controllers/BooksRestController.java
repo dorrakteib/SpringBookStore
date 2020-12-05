@@ -4,7 +4,6 @@ import com.vermeg.bookstore.entities.Book;
 import com.vermeg.bookstore.repositories.BookRepository;
 import com.vermeg.bookstore.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class BooksRestController {
     @Autowired
     BookService bookService;
 
-    @GetMapping("books")
+    @GetMapping("")
     public List<Book> getAll() {
         return bookService.getAll();
     }
@@ -39,12 +38,12 @@ public class BooksRestController {
         return bookService.addBook(b);
     }
 
-    @DeleteMapping("book/{id}")
+    @DeleteMapping("book/{id}/delete")
     public Book deleteBook(@PathVariable Long id) {
         return bookService.deleteBook(id);
     }
 
-    @PutMapping("book/modify/{id}")
+    @PutMapping("book/{id}/modify")
     public void updateBook(@RequestBody @Validated Book b, @PathVariable Long id,
                            BindingResult result) {
         if (result.hasErrors())

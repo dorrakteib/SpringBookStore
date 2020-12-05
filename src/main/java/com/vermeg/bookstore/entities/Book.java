@@ -1,8 +1,11 @@
 package com.vermeg.bookstore.entities;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 import javax.validation.constraints.*;
 
 @Entity @Data @NoArgsConstructor @AllArgsConstructor
@@ -23,13 +26,4 @@ public class Book {
     @NotNull(message = "The release date can't be empty") @PastOrPresent(message = "A valid date" +
             " can't be after the current date")
     private Date releaseDate;
-
-
-    /*public Book(String title, String author, double price, Date releaseDate) {
-        this.title = title;
-        this.author = author;
-        this.price = price;
-        this.releaseDate = releaseDate;
-    }*/
-
 }
