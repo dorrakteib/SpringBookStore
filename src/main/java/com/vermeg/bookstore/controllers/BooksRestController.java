@@ -4,12 +4,13 @@ import com.vermeg.bookstore.entities.Book;
 import com.vermeg.bookstore.repositories.BookRepository;
 import com.vermeg.bookstore.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/bookstore/")
@@ -22,32 +23,32 @@ public class BooksRestController {
     BookService bookService;
 
     @GetMapping("")
-    public List<Book> getAll() {
-        return bookService.getAll();
+    public ResponseEntity<List<Book>> getAll() {
+        return new ResponseEntity<List<Book>>(bookService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("book/{id}")
-    public Book getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id);
+    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+        return new ResponseEntity<Book>(bookService.getBookById(id), HttpStatus.OK);
     }
 
     @PostMapping("book/add")
-    public Book addBook(@RequestBody @Validated Book b, BindingResult result) {
+    public ResponseEntity<Book> addBook(@RequestBody @Validated Book b, BindingResult result) {
         if (result.hasErrors())
             System.err.println(result.getAllErrors());
-        return bookService.addBook(b);
+        return new ResponseEntity<Book>(bookService.addBook(b),HttpStatus.CREATED);
     }
 
     @DeleteMapping("book/{id}/delete")
-    public Book deleteBook(@PathVariable Long id) {
-        return bookService.deleteBook(id);
+    public ResponseEntity<Book> deleteBook(@PathVariable Long id) {
+        return new ResponseEntity<Book>(bookService.deleteBook(id), HttpStatus.OK);
     }
 
     @PutMapping("book/{id}/modify")
-    public void updateBook(@RequestBody @Validated Book b, @PathVariable Long id,
+    public ResponseEntity<Book> updateBook(@RequestBody @Validated Book b, @PathVariable Long id,
                            BindingResult result) {
         if (result.hasErrors())
             System.err.println(result.getAllErrors());
-        bookService.updateBook(b, id);
+        return new ResponseEntity<Book>(bookService.updateBook(b, id), HttpStatus.OK);
     }
 }

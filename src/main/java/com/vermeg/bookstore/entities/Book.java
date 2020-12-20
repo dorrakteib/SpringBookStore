@@ -2,6 +2,7 @@ package com.vermeg.bookstore.entities;
 
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -23,7 +24,27 @@ public class Book {
     @NotNull(message = "The price can't be empty") @Positive(message = "The price must be more " +
             "then 0")
     private double price;
-    @NotNull(message = "The release date can't be empty") @PastOrPresent(message = "A valid date" +
+    @Nullable
+    @PastOrPresent(message = "A valid date" +
             " can't be after the current date")
     private Date releaseDate;
+
+    public Book(String title, String author, double price,  Date releaseDate) {
+        this.title = title;
+        this.author = author;
+        this.price = price;
+        this.releaseDate = releaseDate;
+    }
+
+    public Book(String title, String author, double price) {
+        this.title = title;
+        this.author = author;
+        this.price = price;
+    }
+    public Book(Long id, String title, String author, double price) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.price = price;
+    }
 }
