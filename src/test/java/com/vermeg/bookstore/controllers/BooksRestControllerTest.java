@@ -57,7 +57,7 @@ public class BooksRestControllerTest {
 
     @BeforeAll
     public static void beforeAll() {
-        System.out.println("Start testiong the book controller");
+        System.out.println("Start testing the book controller");
     }
 
     @AfterAll

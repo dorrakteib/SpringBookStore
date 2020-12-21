@@ -34,4 +34,14 @@ public class User {
     public User(Long id) {
         this.id = id;
     }
+
+    public User(@NotNull(message = "The username can't be empty") @Size(min = 3, message = "the title's length " +
+            "must be at least 3") String userName, @NotNull(message = "The password can't be empty") @Size(min = 4, message = "the password's " +
+            "length " +
+            "must be at least 8") String password, @NotNull String roles, boolean active) {
+        this.userName = userName;
+        this.password = password;
+        this.roles = roles;
+        this.active = active;
+    }
 }

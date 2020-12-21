@@ -3,6 +3,8 @@ package com.vermeg.bookstore.controllers;
 import com.vermeg.bookstore.entities.User;
 import com.vermeg.bookstore.services.MyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,26 +21,31 @@ public class UserRestController {
 
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
     @PostMapping("/user/add")
-    public User addUser(@RequestBody User user, BindingResult result) throws Exception {
+    public ResponseEntity<User> addUser(@RequestBody User user, BindingResult result) throws Exception {
         if (result.hasErrors())
             System.err.println(result.getAllErrors());
-        return userService.addUser(user);
+        return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
     }
 
     @PostMapping("/admin/add")
-    public User addAdmin(@RequestBody User user, BindingResult result) throws Exception {
+    public ResponseEntity<User> addAdmin(@RequestBody User user, BindingResult result) throws Exception {
         if (result.hasErrors())
             System.err.println(result.getAllErrors());
-        return userService.addAdmin(user);
+        return new ResponseEntity<>(userService.addAdmin(user), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/user/{id}/delete")
-    public User deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id);
+    public ResponseEntity<User> deleteUser(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
     }
 }
