@@ -1,6 +1,5 @@
 package com.vermeg.bookstore.services;
 
-import com.vermeg.bookstore.DAO.BookDAO;
 import com.vermeg.bookstore.entities.Book;
 import com.vermeg.bookstore.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BookService implements BookDAO {
+public class BookService {
 
     @Autowired
     BookRepository bookRepository;
@@ -37,6 +36,7 @@ public class BookService implements BookDAO {
 
     public Book updateBook(Book b,  Long id) throws ResourceNotFoundException {
         bookRepository.findById(id).map(book -> {
+            System.out.println(book.toString());
             book.setAuthor(b.getAuthor());
             book.setPrice(b.getPrice());
             book.setReleaseDate(b.getReleaseDate());

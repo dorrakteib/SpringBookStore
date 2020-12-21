@@ -1,7 +1,7 @@
 package com.vermeg.bookstore.services;
 
-import com.vermeg.bookstore.DAO.BookDAO;
 import com.vermeg.bookstore.entities.Book;
+import com.vermeg.bookstore.repositories.BookRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,9 +26,9 @@ import static org.mockito.Mockito.*;
 public class BookServiceTest {
 
     @Mock
-    BookDAO bookDAO;
+    BookRepository bookRepository;
 
-    @Autowired @InjectMocks
+     @InjectMocks
     BookService bookService;
 
     @BeforeAll
@@ -60,7 +60,7 @@ public class BookServiceTest {
         books.add(new Book(new Long(5),"Notre dame de Paris","Victor Hugo",28));
         books.add(new Book(new Long(7),"Les misérables","Victor Hugo",30));
 
-        when(this.bookDAO.getAll()).thenReturn(books);
+        when(this.bookRepository.findAll()).thenReturn(books);
         System.out.println(this.bookService.getAll().size());
         System.out.println(Arrays.toString(this.bookService.getAll().toArray()));
         assertTrue(this.bookService.getAll().size() == books.size(),
@@ -68,36 +68,37 @@ public class BookServiceTest {
     }
 
     @Test
-    public void getBookByIdTest() {
-        Book book = new Book(new Long(7),"Les misérables","Victor Hugo",30);
-        when(this.bookDAO.getBookById(book.getId())).thenReturn(book);
+    public void getBookByIdTest() throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = formatter.parse("2008-01-17");
+        Book book = new Book(new Long(7),"Madame Bovary","Gustave Flauvert",14, date);
+        when(this.bookRepository.findById(book.getId())).thenReturn(java.util.Optional.of(book));
         assertEquals(7, book.getId());
-        assertTrue(this.bookService.getBookById(book.getId()).getId() == book.getId(),
+        assertSame(this.bookService.getBookById(book.getId()).getId(),book.getId(),
              "Test failed: Not matching Book ID");
         System.out.println(this.bookService.getBookById(book.getId()).toString());
     }
 
     @Test
     public void addBookTest() {
-        Book book = new Book(new Long(9),"book","book's author",4, new Date());
+        Book book = new Book("book","book's author",4, new Date());
 
         bookService.addBook(book);
-        verify(bookDAO, times(1)).addBook(book);
+        verify(bookRepository, times(1)).save(book);
     }
 
     @Test
-    public void deleteBook() throws ParseException {
-        bookService.deleteBook(new Long(8));
-        verify(bookDAO, times(1)).deleteBook(new Long(8));
+    public void deleteBookTest() throws ParseException {
+        bookService.deleteBook(new Long(2));
+        verify(bookRepository, times(2)).deleteById(new Long(2));
     }
 
     @Test
-    public void updateBook() throws ParseException {
-        String dDate="2020-12-20 23:13:39";
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = formatter.parse(dDate);
+    public void updateBookTest() throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = formatter.parse("2008-01-17");
         Book book = new Book(new Long(7),"Madame Bovary","Gustave Flauvert",14, date);
         bookService.updateBook(book,new Long(7));
-        verify(bookDAO, times(1)).updateBook(book,new Long(7));
+        verify(bookRepository, times(1)).save(book);
     }
 }
