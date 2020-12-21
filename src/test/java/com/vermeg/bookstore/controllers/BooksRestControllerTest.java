@@ -52,7 +52,7 @@ public class BooksRestControllerTest {
     @InjectMocks
     private BooksRestController bookController;
 
-    String url = "http://localhost:8080/bookstore/";
+    private String url = "http://localhost:8080/bookstore/";
 
 
     @BeforeAll

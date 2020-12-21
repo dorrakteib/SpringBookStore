@@ -19,4 +19,8 @@ public class CommandLine {
     private Book book;
     @ManyToOne
     private Command command;
+
+    public CommandLine(@Positive(message = "The quantity must be at least 1") @NotNull int quantity) {
+        this.quantity = quantity;
+    }
 }

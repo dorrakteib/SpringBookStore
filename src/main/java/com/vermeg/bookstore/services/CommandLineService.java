@@ -60,17 +60,21 @@ public class CommandLineService {
         return commandLineRepository.save(commandLine);
     }
 
-    public void deleteCommandLine(Long clId) throws Exception {
+    public CommandLine deleteCommandLine(Long clId) throws Exception {
         CommandLine c = getCommandLineById(clId);
         if (commandService.getCmdById(c.getCommand().getId()).isWindedUp()) {
             throw new Exception("This command is " +
                     "winded you can't modify its lines");
         }
-        if (commandLineRepository.findCommandLinesByCommandId(c.getCommand().getId()).size()==1) commandService.deleteCommand(c.getCommand().getId());
-        commandLineRepository.deleteById(clId);
+        if (commandLineRepository.findCommandLinesByCommandId(c.getCommand().getId()).size()==1)
+            commandService.deleteCommand(c.getCommand().getId());
+        else
+            commandLineRepository.deleteById(clId);
+        return c;
     }
 
     public CommandLine updateCom(Long coId, Long bId, CommandLine c) throws Exception {
+        System.out.println(coId);
         if (commandService.getCmdById(coId).isWindedUp()) {
             throw new Exception("This command is " +
                     "winded you can't modify its lines");

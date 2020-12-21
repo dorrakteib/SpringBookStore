@@ -3,6 +3,8 @@ package com.vermeg.bookstore.controllers;
 import com.vermeg.bookstore.entities.CommandLine;
 import com.vermeg.bookstore.services.CommandLineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,26 +19,26 @@ public class CommandLineRestController {
     CommandLineService commandLineService;
 
     @GetMapping("")
-    public List<CommandLine> getAllLines() {
-        return commandLineService.getAllCommandLines();
+    public ResponseEntity<List<CommandLine>> getAllLines() {
+        return new ResponseEntity<>(commandLineService.getAllCommandLines(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public CommandLine getLine(@PathVariable Long id){
-        return commandLineService.getCommandLineById(id);
+    public ResponseEntity<CommandLine> getLine(@PathVariable Long id){
+        return new ResponseEntity<>(commandLineService.getCommandLineById(id), HttpStatus.OK);
     }
 
     @PostMapping("add/user/{userId}/book/{bookId}")
-    public CommandLine addLine(@PathVariable Long bookId,@PathVariable Long userId,
+    public ResponseEntity<CommandLine> addLine(@PathVariable Long bookId,@PathVariable Long userId,
                                @RequestBody @Validated CommandLine c, BindingResult result) throws Exception {
         if (result.hasErrors())
             System.err.println(result.getAllErrors());
-        return commandLineService.addCommandLine(bookId, c, userId);
+        return new ResponseEntity<>(commandLineService.addCommandLine(bookId, c, userId), HttpStatus.CREATED);
     }
 
     @DeleteMapping("{id}")
-    public void deleteCommandLine(@PathVariable Long id) throws Exception {
-        commandLineService.deleteCommandLine(id);
+    public ResponseEntity<CommandLine> deleteCommandLine(@PathVariable Long id) throws Exception {
+        return new ResponseEntity<CommandLine>(commandLineService.deleteCommandLine(id), HttpStatus.OK);
     }
 
     @PutMapping("modify/command/{cmdId}/book/{bookId}")
