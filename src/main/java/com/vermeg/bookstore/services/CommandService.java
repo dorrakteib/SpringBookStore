@@ -67,10 +67,17 @@ public class CommandService {
             c.setWindedUp(true);
             commandRepository.save(c);
         }
+        return getTotalPrice(comId);
+    }
+
+    public double getTotalPrice(Long comId) {
+        Command c =
+                commandRepository.findById(comId).orElseThrow(()-> new ResourceNotFoundException(
+                        "No command found with the ID " + comId));
         double total = 0;
         List<CommandLine> commandLines =  commandLineRepository.findCommandLinesByCommandId(comId);
         for (CommandLine commandLine: commandLines){
-            total +=commandLine.getQuantity()+commandLine.getBook().getPrice();
+            total +=commandLine.getQuantity()*commandLine.getBook().getPrice();
         }
         return total;
     }

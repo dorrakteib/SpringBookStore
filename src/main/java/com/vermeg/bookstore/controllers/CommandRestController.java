@@ -3,6 +3,8 @@ package com.vermeg.bookstore.controllers;
 import com.vermeg.bookstore.entities.Command;
 import com.vermeg.bookstore.services.CommandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,33 +17,38 @@ public class CommandRestController {
     @Autowired
     CommandService commandService;
 
-    @GetMapping("all")
-    public List<Command> getAllCommand(){
-        return commandService.getAllCommand();
+    @GetMapping("")
+    public ResponseEntity<List<Command>> getAllCommand(){
+        return new ResponseEntity<List<Command>>(commandService.getAllCommand(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public Command getCommandById(@PathVariable Long id) {
-        return commandService.getCmdById(id);
+    public ResponseEntity<Command> getCommandById(@PathVariable Long id) {
+        return new ResponseEntity<>(commandService.getCmdById(id), HttpStatus.OK);
     }
 
     @GetMapping("user/{id}")
-    public List<Command> getCommandByUser(@PathVariable Long id) {
-        return commandService.getUserCommands(id);
+    public ResponseEntity<List<Command>> getCommandByUser(@PathVariable Long id) {
+        return new ResponseEntity<>(commandService.getUserCommands(id), HttpStatus.OK);
     }
 
     @PostMapping("new")
-    public Command createCommand(@RequestBody @Validated Command c) {
-        return commandService.createCommand(c);
+    public ResponseEntity<Command> createCommand(@RequestBody @Validated Command c) {
+        return new ResponseEntity<>(commandService.createCommand(c), HttpStatus.CREATED);
     }
 
     @DeleteMapping("{id}")
-    public Command deleteCommand(@PathVariable Long id) {
-        return commandService.deleteCommand(id);
+    public ResponseEntity<Command> deleteCommand(@PathVariable Long id) {
+        return new ResponseEntity<>(commandService.deleteCommand(id), HttpStatus.OK);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Double> windUpCommand(@PathVariable Long id){
+        return new ResponseEntity<>(commandService.windUpCommand(id), HttpStatus.OK);
     }
 
     @GetMapping("{id}/total")
-    public double windUpCommand(@PathVariable Long id){
-        return commandService.windUpCommand(id);
+    public ResponseEntity<Double> getTotal(@PathVariable Long id){
+        return new ResponseEntity<>(commandService.getTotalPrice(id), HttpStatus.OK);
     }
 }

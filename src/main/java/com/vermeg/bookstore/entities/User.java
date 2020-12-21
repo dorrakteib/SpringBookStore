@@ -30,4 +30,8 @@ public class User {
     @NotNull
     private String roles;
     private boolean active;
+
+    public User(Long id) {
+        this.id = id;
+    }
 }
