@@ -31,8 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/bookstore/").permitAll()
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/**").permitAll();
+                /*.antMatchers("/bookstore/").permitAll()
                 .antMatchers("/bookstore/book/{id}").permitAll()
                 .antMatchers("/bookstore/book/**").hasRole("ADMIN")
                 .antMatchers("/command/**").hasAnyRole("ADMIN", "USER")
@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/add").permitAll()
                 .antMatchers("/admin/add").hasRole("ADMIN")
                 .antMatchers("/user/{id}/delete").hasRole("ADMIN")
-                .and().httpBasic();
+                .and().httpBasic();*/
     }
 
 
@@ -61,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         if (userRepository.findAll().size()==0){
             User user = new User();
             user.setActive(true);
+            user.setFirstName("admin");
+            user.setLastName("admin");
             user.setUserName("admin");
             user.setPassword(passwordEncoder.encode("admin"));
             user.setRoles("ROLE_ADMIN,ROLE_USER");

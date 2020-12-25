@@ -71,7 +71,8 @@ public class BookServiceTest {
     public void getBookByIdTest() throws ParseException {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = formatter.parse("2008-01-17");
-        Book book = new Book(new Long(7),"Madame Bovary","Gustave Flauvert",14, date);
+        Book book = new Book(new Long(7),"Madame Bovary","Gustave Flauvert",14, date, null,
+                new Date());
         when(this.bookRepository.findById(book.getId())).thenReturn(java.util.Optional.of(book));
         assertEquals(7, book.getId());
         assertSame(this.bookService.getBookById(book.getId()).getId(),book.getId(),
@@ -97,7 +98,7 @@ public class BookServiceTest {
     public void updateBookTest() throws ParseException {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = formatter.parse("2008-01-17");
-        Book book = new Book(new Long(7),"Madame Bovary","Gustave Flauvert",14, date);
+        Book book = new Book(new Long(7),"Madame Bovary","Gustave Flauvert",14, date, null, new Date());
         bookService.updateBook(book,new Long(7));
         verify(bookRepository, times(1)).save(book);
     }

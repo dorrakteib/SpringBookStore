@@ -1,13 +1,15 @@
 package com.vermeg.bookstore.entities;
 
-import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.springframework.lang.Nullable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.Set;
-import javax.validation.constraints.*;
 
 @Entity @Data @NoArgsConstructor @AllArgsConstructor
 @Table(uniqueConstraints={@UniqueConstraint(columnNames={"title"})})
@@ -24,10 +26,15 @@ public class Book {
     @NotNull(message = "The price can't be empty") @Positive(message = "The price must be more " +
             "then 0")
     private double price;
-    @Nullable
     @PastOrPresent(message = "A valid date" +
             " can't be after the current date")
     private Date releaseDate;
+    @Size(min=20, message = "the description's length " +
+            "must be at least 20")
+    private  String description;
+    @NotNull
+    private Date addDate;
+
 
     public Book(String title, String author, double price,  Date releaseDate) {
         this.title = title;

@@ -144,7 +144,8 @@ public class BooksRestControllerTest {
 
     @Test
     public void updateBookTest() throws Exception {
-        Book book = new Book(new Long(2),"Remember me", "Sophie Kinsella", 43, new Date());
+        Book book = new Book(new Long(2),"Remember me", "Sophie Kinsella", 43, new Date(), null,
+                new Date());
 
         when(bookService.updateBook(any(Book.class), anyLong())).thenReturn(book);
 

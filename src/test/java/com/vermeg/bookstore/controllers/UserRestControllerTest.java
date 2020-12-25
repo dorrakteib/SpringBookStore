@@ -80,7 +80,8 @@ public class UserRestControllerTest {
     @Test
     public void getUserByIdTest() throws Exception {
 
-        User u = new User(new Long(5),"dorrakt", "dorraKt", "ROLE_USER", true);
+        User u = new User(new Long(5), "Dorra", "Kteib", "dKteib@vermeg.com", "12345678",
+                "dorrakt", "dorraKt", "ROLE_USER", true);
 
         when(userService.getUserById(anyLong())).thenReturn(u);
 

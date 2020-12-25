@@ -49,7 +49,8 @@ public class MyUserServiceTest {
 
     @Test
     public void getUserByIdTest() {
-        User u = new User(new Long(5),"dorrakt", "dorraKt", "ROLE_USER", true);
+        User u = new User(new Long(5), "Dorra", "Kteib", "dKteib@vermeg.com", "12345678",
+                "dorrakt", "dorraKt", "ROLE_USER", true);
 
         when(this.userRepository.findById(anyLong())).thenReturn(java.util.Optional.of(u));
         assertEquals(5, u.getId());
@@ -60,10 +61,8 @@ public class MyUserServiceTest {
     @Test
     public void getAllUsersTest() {
         List<User> u = new ArrayList<>();
-        u.add(new User(new Long(1),"admin", "admin", "ROLE_ADMIN,ROLE_USER", true));
-        u.add(new User(new Long(3),"dorra", "dorra", "ROLE_USER", true));
-        u.add(new User(new Long(4),"ali", "ali", "ROLE_ADMIN", true));
-        u.add(new User(new Long(5),"dorrakt", "dorraKt", "ROLE_USER", true));
+        u.add(new User(new Long(5), "Dorra", "Kteib", "dKteib@vermeg.com", "12345678",
+                "dorrakt", "dorraKt", "ROLE_USER", true));
 
         when(this.userRepository.findAll()).thenReturn(u);
         assertTrue(this.userService.getAllUsers().size() == u.size(),

@@ -46,8 +46,8 @@ public class MyUserService implements UserDetailsService {
 
     public User addUser(User user) throws Exception {
         if (userRepository.getUserByUserName(user.getUserName()).isPresent()) throw new Exception("This " +
-                "username " +
-                "already exist");
+                "username already exist");
+        user.setUserName(user.getEmail().substring(0, user.getEmail().indexOf("@")));
         user.setPassword(securityConfig.passwordEncoder().encode(user.getPassword()));
         user.setRoles("ROLE_USER");
         user.setActive(true);

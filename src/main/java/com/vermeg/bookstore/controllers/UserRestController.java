@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("")
 public class UserRestController {
@@ -33,7 +34,7 @@ public class UserRestController {
     @PostMapping("/user/add")
     public ResponseEntity<User> addUser(@RequestBody User user, BindingResult result) throws Exception {
         if (result.hasErrors())
-            System.err.println(result.getAllErrors());
+            return new ResponseEntity<>(userService.addUser(user), HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
     }
 
