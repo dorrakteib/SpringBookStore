@@ -5,16 +5,10 @@ import com.vermeg.bookstore.repositories.BookRepository;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -28,8 +22,11 @@ public class BookServiceTest {
     @Mock
     BookRepository bookRepository;
 
-     @InjectMocks
+    @InjectMocks
     BookService bookService;
+
+    Book book;
+    List<Book> books = new ArrayList<>();
 
     @BeforeAll
     public static void beforeAll() {
@@ -44,7 +41,8 @@ public class BookServiceTest {
     @BeforeEach
     public void setUp() {
         System.out.println("The test started");
-        MockitoAnnotations.initMocks(this);
+        book = new Book(new Long(1), "L'alshimiste", "Paulo Coelho", 30);
+        books.add(book);
     }
 
     @AfterEach
@@ -54,52 +52,42 @@ public class BookServiceTest {
 
     @Test
     public void getAllTest() {
-        List<Book> books = new ArrayList<Book>();
-        books.add(new Book(new Long(1),"L'alshimiste","Paulo Coelho",30));
-        books.add(new Book(new Long(2),"Remember me","Sophie Kinsella",43));
-        books.add(new Book(new Long(5),"Notre dame de Paris","Victor Hugo",28));
-        books.add(new Book(new Long(7),"Les misérables","Victor Hugo",30));
 
         when(this.bookRepository.findAll()).thenReturn(books);
-        System.out.println(this.bookService.getAll().size());
-        System.out.println(Arrays.toString(this.bookService.getAll().toArray()));
-        assertTrue(this.bookService.getAll().size() == books.size(),
-                "Test failed: Size of list isn't equal to the size of the present test");
+        assertTrue(this.bookService.getAll().size() == books
+                .size(), "Test failed: Size of list isn't equal to the size of the " +
+                "present test");
     }
 
     @Test
-    public void getBookByIdTest() throws ParseException {
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = formatter.parse("2008-01-17");
-        Book book = new Book(new Long(7),"Madame Bovary","Gustave Flauvert",14, date, null,
-                new Date());
-        when(this.bookRepository.findById(book.getId())).thenReturn(java.util.Optional.of(book));
-        assertEquals(7, book.getId());
-        assertSame(this.bookService.getBookById(book.getId()).getId(),book.getId(),
-             "Test failed: Not matching Book ID");
+    public void getBookByIdTest() {
+        when(this.bookRepository.findById(book.getId())).thenReturn(java.util.Optional
+                .ofNullable(book));
+        assertEquals(1, book.getId());
+        assertSame(book, this.bookService.getBookById(book.getId()),
+                "Test failed: Not matching Book ID");
         System.out.println(this.bookService.getBookById(book.getId()).toString());
     }
 
     @Test
     public void addBookTest() {
         Book book = new Book("book","book's author",4, new Date());
-
+        books.add(book);
         bookService.addBook(book);
         verify(bookRepository, times(1)).save(book);
     }
 
     @Test
-    public void deleteBookTest() throws ParseException {
-        bookService.deleteBook(new Long(2));
-        verify(bookRepository, times(2)).deleteById(new Long(2));
+    public void deleteBookTest() {
+        bookService.deleteBook(2L);
+        verify(bookRepository, times(2)).deleteById(2L);
     }
 
     @Test
-    public void updateBookTest() throws ParseException {
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = formatter.parse("2008-01-17");
-        Book book = new Book(new Long(7),"Madame Bovary","Gustave Flauvert",14, date, null, new Date());
-        bookService.updateBook(book,new Long(7));
+    public void updateBookTest() {
+
+        Book book = new Book(1L, "L'alshimiste", "Paulo Coelho", 20);
+        bookService.updateBook(book, 1L);
         verify(bookRepository, times(1)).save(book);
     }
 }

@@ -73,12 +73,4 @@ public class MyUserService implements UserDetailsService {
         userRepository.deleteById(userId);
         return utl;
     }
-
-    public User updateUserName(Long userId, User user){
-        User u = getUserById(userId);
-        u.setUserName(user.getUserName());
-        return userRepository.save(u);
-    }
-
-
 }
