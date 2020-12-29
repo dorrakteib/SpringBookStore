@@ -16,15 +16,28 @@ public class MyUserDetails implements UserDetails{
 
 
     public MyUserDetails(User user) {
-        this.myUser=user;
-        this.authorities=
+        this.myUser = user;
+        this.authorities =
                 // on va parcourir l'array list avec stream
                 Arrays.stream(user.getRoles().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
     }
 
-    public MyUserDetails(){}
+    public MyUserDetails() {
+    }
+
+    public User getMyUser() {
+        return myUser;
+    }
+
+    public void setMyUser(User myUser) {
+        this.myUser = myUser;
+    }
+
+    public void setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities = authorities;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
