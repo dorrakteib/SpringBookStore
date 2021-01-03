@@ -6,6 +6,7 @@ import com.vermeg.bookstore.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,18 +34,21 @@ public class BooksRestController {
     }
 
     @PostMapping("book/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Book> addBook(@RequestBody @Validated Book b, BindingResult result) {
         if (result.hasErrors())
             System.err.println(result.getAllErrors());
         return new ResponseEntity<>(bookService.addBook(b), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("book/{id}")
+    @DeleteMapping("book/{id}/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Book> deleteBook(@PathVariable Long id) {
         return new ResponseEntity<>(bookService.deleteBook(id), HttpStatus.OK);
     }
 
-    @PutMapping("book/{id}")
+    @PutMapping("book/{id}/update")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Book> updateBook(@RequestBody @Validated Book b, @PathVariable Long id,
                            BindingResult result) {
         if (result.hasErrors())

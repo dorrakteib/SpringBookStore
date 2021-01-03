@@ -1,5 +1,6 @@
 package com.vermeg.bookstore.security.jwt.response;
 
+import com.vermeg.bookstore.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,16 +15,11 @@ public class JwtResponse {
 
     private String token;
     private String type = "Bearer";
-    private Long id;
-    private String username;
-    private String email;
-    private List<String> roles = new ArrayList<>();
+    private User user;
 
-    public JwtResponse(String token, Long id, String username, String email, List<String> roles) {
+    public JwtResponse(String token, User user){
         this.token = token;
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.roles = roles;
+        this.user = user;
     }
+
 }

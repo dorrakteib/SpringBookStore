@@ -71,8 +71,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/**").permitAll()
-                .antMatchers("/user/all").permitAll()
+                .authorizeRequests().antMatchers("/bookstore/").permitAll()
+                .antMatchers("/bookstore/book/{id}").permitAll()
+                .antMatchers("/bookstore/book/add").hasRole("ADMIN")
+                .antMatchers("/bookstore/book/{id}/**").hasRole("ADMIN")
+                .antMatchers("/command/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/command-line/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/user/add").permitAll()
+                .antMatchers("/user/signin").permitAll()
+                .antMatchers("/admin/add").hasRole("ADMIN")
+                .antMatchers("/user/{id}/delete").hasRole("ADMIN")
+                .antMatchers("/user/all").hasRole("ADMIN")
+                .antMatchers("/user/{id}").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

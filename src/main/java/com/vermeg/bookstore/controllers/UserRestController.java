@@ -56,6 +56,7 @@ public class UserRestController {
     }
 
     @PostMapping("/admin/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> addAdmin(@RequestBody User user, BindingResult result) throws Exception {
         if (result.hasErrors())
             System.err.println(result.getAllErrors());
@@ -63,6 +64,7 @@ public class UserRestController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> deleteUser(@PathVariable Long id) {
         return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
     }
@@ -77,14 +79,12 @@ public class UserRestController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getMyUser().getId(),
-                userDetails.getUsername(),
-                userDetails.getMyUser().getEmail(),
-                roles));
+        return ResponseEntity.ok(new JwtResponse(jwt, new User(userDetails.getMyUser().getId(),
+                userDetails.getMyUser().getFirstName(),userDetails.getMyUser().getLastName(),
+                userDetails.getMyUser().getEmail(),  userDetails.getMyUser().getTel(),
+                userDetails.getUsername(), userDetails.getPassword(),
+                userDetails.getMyUser().getRoles(), userDetails.getMyUser().isActive())
+                ));
     }
 }

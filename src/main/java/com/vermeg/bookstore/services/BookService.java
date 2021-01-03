@@ -38,11 +38,12 @@ public class BookService {
 
     public Book updateBook(Book b,  Long id) throws ResourceNotFoundException {
         bookRepository.findById(id).map(book -> {
-            System.out.println(book.toString());
             book.setAuthor(b.getAuthor());
             book.setPrice(b.getPrice());
             book.setReleaseDate(b.getReleaseDate());
             book.setTitle(b.getTitle());
+            book.setAddDate(b.getAddDate());
+            book.setDescription(b.getDescription());
             return bookRepository.save(book);
         }).orElseThrow(()-> new ResourceNotFoundException("The book " +
                         "with the ID "+id+" does not exist"));
